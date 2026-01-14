@@ -8,6 +8,8 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const [isLogoFormed, setIsLogoFormed] = useState(false);
+  const hasInitializedRef = useRef(false);
+  const particlesReadyRef = useRef(false);
 
   // Configuration
   const PRIMARY_PARTICLE_COUNT = 2400;
@@ -177,15 +179,16 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       colorFactor: number;
       shimmerOffset: number;
 
-      constructor(target: { x: number; y: number }, baseColor: string, isPrimary: boolean) {
+      constructor(target: { x: number; y: number }, baseColor: string, isPrimary: boolean, startAtTarget: boolean = false) {
         this.char = Math.random() > 0.5 ? '1' : '0';
         this.targetX = target.x; 
         this.targetY = target.y;
         this.x = this.targetX; 
-        this.y = -(Math.random() * 5000 + 500);
+        // If startAtTarget is true, particles start at their final position (no animation)
+        this.y = startAtTarget ? this.targetY : -(Math.random() * 5000 + 500);
         this.vy = 0; 
         this.gravity = GRAVITY + Math.random() * 0.05;
-        this.isLocked = false; 
+        this.isLocked = startAtTarget; 
         this.visible = true;
         
         this.baseColor = baseColor;
@@ -239,12 +242,19 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       const scale = Math.min(width / 1100, height / 600) * 0.85;
       const geo = setupLogoGeometry(width, height, scale);
       
-      primaryParticles = geo.pts1.map(pt => new Particle(pt, PRIMARY_BASE_COLOR, true));
-      secondaryParticles = geo.pts2.map(pt => new Particle(pt, SECONDARY_BASE_COLOR, false));
+      // If already initialized (resize), start particles at their target positions
+      const startAtTarget = hasInitializedRef.current;
+      
+      primaryParticles = geo.pts1.map(pt => new Particle(pt, PRIMARY_BASE_COLOR, true, startAtTarget));
+      secondaryParticles = geo.pts2.map(pt => new Particle(pt, SECONDARY_BASE_COLOR, false, startAtTarget));
       backgroundElements = Array.from({ length: 130 }, () => new BackgroundDrifter(width, height));
+      
+      if (!hasInitializedRef.current) {
+        hasInitializedRef.current = true;
+      }
     };
 
-    let logoFormedTriggered = false;
+    let logoFormedTriggered = particlesReadyRef.current;
 
     const animate = () => {
       const now = Date.now();
@@ -269,6 +279,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
       if (!logoFormedTriggered && lockedCount > primaryParticles.length * 0.5) {
         logoFormedTriggered = true;
+        particlesReadyRef.current = true;
         setIsLogoFormed(true);
         onLogoFormed?.();
       }
@@ -277,8 +288,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     };
 
     const handleResize = () => { 
-      startTime = Date.now(); 
-      logoFormedTriggered = false;
+      // Don't reset startTime on resize to prevent glitching
       init(); 
     };
     
@@ -302,7 +312,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     <>
       <canvas ref={canvasRef} className="absolute inset-0 z-10" />
       
-      {/* Subheading and symbol */}
+      {/* Subheading and symbol - increased font size and opacity */}
       <div 
         className="absolute z-20 pointer-events-none transition-all duration-1000 ease-out flex flex-col items-center"
         style={{ 
@@ -312,12 +322,12 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
           opacity: isLogoFormed ? 1 : 0 
         }}
       >
-        <h2 className="mb-1 pointer-events-auto cursor-default text-[#3E828D] text-[1.4vh] md:text-[12px] leading-none tracking-[0.15em] uppercase transition-all duration-300 text-center hover:scale-110 hover:text-foreground font-kaisei">
+        <h2 className="mb-1 pointer-events-auto cursor-default text-primary/90 text-[1.8vh] md:text-[15px] leading-tight tracking-[0.12em] uppercase transition-all duration-300 text-center hover:scale-105 hover:text-foreground font-kaisei">
           The Official Student Chapter Of Computer Society Of India <br/> At DJ Sanghvi College Of Engineering
         </h2>
 
         <div className="flex justify-center items-center w-full">
-          <h2 className="pointer-events-auto cursor-default text-[#29464F] text-[2.8vh] md:text-[24px] leading-none tracking-[0.25em] mt-4 transition-all duration-300 hover:scale-125 hover:text-accent font-mono">
+          <h2 className="pointer-events-auto cursor-default text-primary/80 text-[3.5vh] md:text-[30px] leading-none tracking-[0.25em] mt-4 transition-all duration-300 hover:scale-125 hover:text-accent font-mono font-bold">
             {"</>"}
           </h2>
         </div>

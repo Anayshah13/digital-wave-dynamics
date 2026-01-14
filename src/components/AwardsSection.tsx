@@ -38,82 +38,93 @@ const awards: Award[] = [
 const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 50 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 50, scale: 0.9 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true }}
-      transition={{ delay: index * 0.1, duration: 0.5 }}
+      transition={{ delay: index * 0.1, duration: 0.5, ease: "easeOut" }}
       whileHover={{ 
-        scale: 1.05, 
-        y: -10,
-        boxShadow: "0 20px 40px rgba(0, 161, 181, 0.3)"
+        scale: 1.12, 
+        y: -20,
+        rotateY: 5,
+        rotateX: -5,
+        transition: { duration: 0.3, ease: "easeOut" }
       }}
-      className="glass-teal rounded-xl p-6 flex flex-col items-center text-center min-w-[180px] max-w-[200px] cursor-pointer transition-all duration-300 group"
+      className="glass-teal rounded-xl p-6 flex flex-col items-center text-center min-w-[180px] max-w-[200px] cursor-pointer group relative overflow-hidden"
+      style={{ transformStyle: 'preserve-3d' }}
     >
+      {/* Animated glow effect on hover */}
+      <motion.div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+        style={{
+          background: 'radial-gradient(circle at 50% 50%, hsl(186, 100%, 40%) 0%, transparent 70%)',
+          filter: 'blur(20px)',
+          transform: 'translateZ(-10px)'
+        }}
+      />
+      
+      {/* Shimmer effect */}
+      <motion.div 
+        className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-300"
+        style={{
+          background: 'linear-gradient(105deg, transparent 40%, hsl(186, 100%, 70%) 50%, transparent 60%)',
+          transform: 'translateX(-100%)'
+        }}
+        whileHover={{
+          transform: ['translateX(-100%)', 'translateX(100%)'],
+          transition: { duration: 0.6, ease: "easeInOut" }
+        }}
+      />
+      
       <motion.span 
-        className="text-3xl md:text-4xl font-kalnia font-bold text-primary mb-3 group-hover:text-accent transition-colors"
-        whileHover={{ scale: 1.1 }}
+        className="relative z-10 text-3xl md:text-4xl font-kalnia font-bold text-primary mb-3 group-hover:text-accent transition-colors duration-300"
+        whileHover={{ scale: 1.15, textShadow: "0 0 20px hsl(186, 100%, 50%)" }}
       >
         {award.year}
       </motion.span>
-      <h3 className="text-sm md:text-base font-kaisei font-medium text-foreground mb-2 group-hover:text-glow-subtle transition-all">
+      <h3 className="relative z-10 text-sm md:text-base font-kaisei font-medium text-foreground mb-2 group-hover:text-white transition-all duration-300">
         {award.title}
       </h3>
-      <p className="text-xs font-kaisei text-muted-foreground leading-relaxed group-hover:text-secondary-foreground transition-colors">
+      <p className="relative z-10 text-xs font-kaisei text-muted-foreground leading-relaxed group-hover:text-foreground/80 transition-colors duration-300">
         {award.description}
       </p>
+      
+      {/* Border glow on hover */}
+      <motion.div 
+        className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+        style={{
+          boxShadow: 'inset 0 0 20px hsl(186, 100%, 40%), 0 0 30px hsl(186, 100%, 30%)'
+        }}
+      />
     </motion.div>
   );
 };
 
 const AwardsSection: React.FC = () => {
   return (
-    <section className="min-h-screen w-full relative overflow-hidden">
-      {/* Background with waves continuation */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary-dark/50 to-primary-deep/80" />
+    <section className="h-full w-full relative overflow-hidden flex flex-col items-center justify-center">
+      {/* Background matching the wave colors */}
+      <div className="absolute inset-0 bg-gradient-to-b from-primary-dark via-primary-deep to-background" />
       
-      {/* Decorative waves at top */}
-      <div className="absolute top-0 left-0 right-0 h-32 pointer-events-none">
-        <svg 
-          className="w-full h-full" 
-          preserveAspectRatio="none" 
-          viewBox="0 0 1440 100" 
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <motion.path
-            animate={{ 
-              d: [
-                "M0,50L60,55C120,60,240,70,360,72C480,74,600,68,720,60C840,52,960,42,1080,42C1200,42,1320,52,1380,57L1440,62L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z",
-                "M0,60L60,52C120,44,240,28,360,30C480,32,600,52,720,62C840,72,960,72,1080,65C1200,58,1320,44,1380,37L1440,30L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z",
-                "M0,50L60,55C120,60,240,70,360,72C480,74,600,68,720,60C840,52,960,42,1080,42C1200,42,1320,52,1380,57L1440,62L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
-              ]
-            }}
-            transition={{ repeat: Infinity, duration: 8, ease: "easeInOut" }}
-            fill="#00a1b5"
-            opacity="0.4"
-          />
-          <motion.path
-            animate={{ 
-              d: [
-                "M0,30L60,35C120,40,240,50,360,52C480,54,600,48,720,42C840,36,960,30,1080,32C1200,34,1320,44,1380,49L1440,54L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z",
-                "M0,40L60,34C120,28,240,16,360,20C480,24,600,44,720,52C840,60,960,56,1080,48C1200,40,1320,28,1380,22L1440,16L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z",
-                "M0,30L60,35C120,40,240,50,360,52C480,54,600,48,720,42C840,36,960,30,1080,32C1200,34,1320,44,1380,49L1440,54L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
-              ]
-            }}
-            transition={{ repeat: Infinity, duration: 6, ease: "easeInOut", delay: 0.5 }}
-            fill="#006575"
-            opacity="0.6"
-          />
-        </svg>
-      </div>
+      {/* Subtle grid pattern */}
+      <div 
+        className="absolute inset-0 opacity-[0.02]"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, hsl(186, 100%, 50%) 1px, transparent 1px),
+            linear-gradient(to bottom, hsl(186, 100%, 50%) 1px, transparent 1px)
+          `,
+          backgroundSize: '60px 60px'
+        }}
+      />
 
       {/* Content */}
-      <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-6 py-20">
+      <div className="relative z-10 flex flex-col items-center justify-center px-6 py-16">
         <motion.h1
           initial={{ opacity: 0, y: -30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="font-kalnia text-5xl md:text-7xl lg:text-8xl font-bold text-foreground mb-16 text-glow tracking-wider"
+          className="font-kalnia text-5xl md:text-7xl lg:text-8xl font-bold text-foreground mb-12 text-glow tracking-wider"
         >
           AWARDS
         </motion.h1>
@@ -124,9 +135,6 @@ const AwardsSection: React.FC = () => {
           ))}
         </div>
       </div>
-
-      {/* Bottom gradient */}
-      <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-background to-transparent pointer-events-none" />
     </section>
   );
 };

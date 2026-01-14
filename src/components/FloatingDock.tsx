@@ -17,8 +17,8 @@ const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
     return val - bounds.x - bounds.width / 2;
   });
 
-  const sizeTransform = useTransform(distance, [-100, 0, 100], [40, 56, 40]);
-  const size = useSpring(sizeTransform, { mass: 0.1, stiffness: 220, damping: 22 });
+  const sizeTransform = useTransform(distance, [-120, 0, 120], [38, 52, 38]);
+  const size = useSpring(sizeTransform, { mass: 0.08, stiffness: 180, damping: 18 });
 
   const [isHovered, setIsHovered] = React.useState(false);
 
@@ -28,25 +28,25 @@ const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
       style={{ width: size, height: size }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative flex items-center justify-center rounded-full glass border-primary/20 text-muted-foreground hover:text-foreground hover:border-primary/50 transition-all shadow-md cursor-pointer"
+      className="group relative flex items-center justify-center rounded-full bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 cursor-pointer"
     >
       <AnimatePresence>
         {isHovered && (
           <motion.span 
-            initial={{ opacity: 0, y: 10, scale: 0.8 }}
+            initial={{ opacity: 0, y: 8, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 5, scale: 0.9 }}
-            transition={{ duration: 0.15 }}
-            className="absolute -top-12 left-1/2 -translate-x-1/2 rounded-lg glass-strong px-3 py-1.5 text-xs font-medium text-foreground whitespace-nowrap z-50"
+            exit={{ opacity: 0, y: 4, scale: 0.95 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="absolute -top-10 left-1/2 -translate-x-1/2 rounded-lg bg-black/60 backdrop-blur-xl border border-white/10 px-3 py-1.5 text-[10px] font-medium text-white/90 whitespace-nowrap z-50"
           >
             {title}
           </motion.span>
         )}
       </AnimatePresence>
       <motion.div 
-        whileHover={{ y: -6 }}
-        transition={{ duration: 0.2 }}
-        className="h-5 w-5 md:h-6 md:w-6"
+        animate={{ y: isHovered ? -4 : 0 }}
+        transition={{ duration: 0.25, ease: "easeOut" }}
+        className="h-4 w-4 md:h-5 md:w-5"
       >
         {icon}
       </motion.div>
@@ -72,12 +72,9 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ onNavigate }) => {
 
   return (
     <motion.div
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ delay: 1.5, duration: 0.6, ease: "easeOut" }}
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
-      className="mx-auto flex h-14 md:h-16 items-end gap-2 md:gap-3 rounded-2xl glass-strong px-4 md:px-6 pb-2 md:pb-3 shadow-xl"
+      className="mx-auto flex h-14 md:h-16 items-end gap-1.5 md:gap-2 rounded-full bg-black/20 backdrop-blur-2xl border border-white/[0.06] px-4 md:px-5 pb-2 md:pb-2.5 shadow-2xl shadow-black/20"
     >
       {items.map((item) => (
         <DockIcon key={item.title} mouseX={mouseX} {...item} />
