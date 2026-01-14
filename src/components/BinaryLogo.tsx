@@ -11,12 +11,12 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const hasInitializedRef = useRef(false);
   const particlesReadyRef = useRef(false);
 
-  // Configuration
+  // Configuration - Original Duller Colors
   const PRIMARY_PARTICLE_COUNT = 2400;
   const SECONDARY_PARTICLE_COUNT = 1500;
-  
-  const PRIMARY_BASE_COLOR = '#00a1b5';
-  const SECONDARY_BASE_COLOR = '#0f574c';
+
+  const PRIMARY_BASE_COLOR = '#00a1b5'; // Original Duller Teal
+  const SECONDARY_BASE_COLOR = '#0f574c'; // Original Duller Green/Teal
 
   const HOVER_COLOR = '#ffffff';
   const TRANSITION_DELAY = 400;
@@ -56,11 +56,11 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     if (!canvas) return;
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
-    
+
     let animationFrameId: number;
     let startTime = Date.now();
     let width: number, height: number;
-    
+
     let primaryParticles: Particle[] = [];
     let secondaryParticles: Particle[] = [];
     let backgroundElements: BackgroundDrifter[] = [];
@@ -85,26 +85,26 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       constructor(w: number, h: number) {
         const types = ['</>', '101', '01', '{ }', 'git', 'main', 'null'];
         this.char = types[Math.floor(Math.random() * types.length)];
-        this.x = Math.random() * w; 
+        this.x = Math.random() * w;
         this.y = Math.random() * h;
-        this.vx = (Math.random() - 0.5) * 0.18; 
+        this.vx = (Math.random() - 0.5) * 0.18;
         this.vy = (Math.random() - 0.5) * 0.18;
-        this.opacity = Math.random() * 0.12 + 0.02; 
+        this.opacity = Math.random() * 0.12 + 0.02;
         this.size = Math.random() * 10 + 8;
       }
 
       update(w: number, h: number) {
-        this.x += this.vx; 
+        this.x += this.vx;
         this.y += this.vy;
-        if (this.x < 0) this.x = w; 
+        if (this.x < 0) this.x = w;
         if (this.x > w) this.x = 0;
-        if (this.y < 0) this.y = h; 
+        if (this.y < 0) this.y = h;
         if (this.y > h) this.y = 0;
       }
 
       draw(context: CanvasRenderingContext2D) {
         context.save();
-        context.fillStyle = `rgba(0, 158, 179, ${this.opacity})`; 
+        context.fillStyle = `rgba(0, 158, 179, ${this.opacity})`;
         context.font = `${this.size}px monospace`;
         context.fillText(this.char, this.x, this.y);
         context.restore();
@@ -114,7 +114,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     const setupLogoGeometry = (w: number, h: number, scale: number) => {
       const path1 = new Path2D();
       const path2 = new Path2D();
-      
+
       const center1X = 3835, center1Y = 3575;
       const center2X = 6923, center2Y = 6068;
 
@@ -123,11 +123,11 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
       const matrix1 = new DOMMatrix()
         .translate(xAnchor, yPos)
-        .scale(scale * 0.085, -scale * 0.085) 
+        .scale(scale * 0.085, -scale * 0.085)
         .translate(-center1X, -center1Y);
-      
+
       const matrix2 = new DOMMatrix()
-        .translate(xAnchor + 82, yPos - 57) 
+        .translate(xAnchor + 136, yPos - 96)
         .scale(scale * 0.065, -scale * 0.065)
         .translate(-center2X, -center2Y);
 
@@ -143,9 +143,9 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
           if (ctx.isPointInPath(path, rx, ry, 'nonzero')) {
             let overlap = false;
             for (let i = pts.length - 1; i >= Math.max(0, pts.length - 1000); i--) {
-              if (Math.hypot(pts[i].x - rx, pts[i].y - ry) < minDistance) { 
-                overlap = true; 
-                break; 
+              if (Math.hypot(pts[i].x - rx, pts[i].y - ry) < minDistance) {
+                overlap = true;
+                break;
               }
             }
             if (!overlap) pts.push({ x: rx, y: ry });
@@ -155,7 +155,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
         return pts;
       };
 
-      return { 
+      return {
         pts1: generatePoints(path1, PRIMARY_PARTICLE_COUNT, 4.2),
         pts2: generatePoints(path2, SECONDARY_PARTICLE_COUNT, 5.2)
       };
@@ -181,16 +181,16 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
       constructor(target: { x: number; y: number }, baseColor: string, isPrimary: boolean, startAtTarget: boolean = false) {
         this.char = Math.random() > 0.5 ? '1' : '0';
-        this.targetX = target.x; 
+        this.targetX = target.x;
         this.targetY = target.y;
-        this.x = this.targetX; 
+        this.x = this.targetX;
         // If startAtTarget is true, particles start at their final position (no animation)
         this.y = startAtTarget ? this.targetY : -(Math.random() * 5000 + 500);
-        this.vy = 0; 
+        this.vy = 0;
         this.gravity = GRAVITY + Math.random() * 0.05;
-        this.isLocked = startAtTarget; 
+        this.isLocked = startAtTarget;
         this.visible = true;
-        
+
         this.baseColor = baseColor;
         this.isPrimary = isPrimary;
 
@@ -205,16 +205,16 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
         const relativeTime = (now + this.blinkOffset) % this.blinkCycle;
         this.visible = relativeTime > this.offDuration;
         if (elapsed > TRANSITION_DELAY && !this.isLocked) {
-          this.vy += this.gravity; 
+          this.vy += this.gravity;
           this.y += this.vy;
-          if (this.y >= this.targetY) { 
-            this.y = this.targetY; 
-            this.vy = 0; 
-            this.isLocked = true; 
+          if (this.y >= this.targetY) {
+            this.y = this.targetY;
+            this.vy = 0;
+            this.isLocked = true;
           }
         }
-        this.colorFactor = Math.hypot(this.x - mX, this.y - mY) < HOVER_RADIUS 
-          ? 1 - (Math.hypot(this.x - mX, this.y - mY) / HOVER_RADIUS) 
+        this.colorFactor = Math.hypot(this.x - mX, this.y - mY) < HOVER_RADIUS
+          ? 1 - (Math.hypot(this.x - mX, this.y - mY) / HOVER_RADIUS)
           : 0;
       }
 
@@ -224,11 +224,11 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
         context.save();
         context.globalAlpha = shimmer;
         context.fillStyle = interpolateColor(this.baseColor, HOVER_COLOR, this.colorFactor);
-        
+
         const fontSize = this.isPrimary ? BASE_FONT_SIZE : BASE_FONT_SIZE - 3;
         context.font = `bold ${fontSize}px monospace`;
-        
-        context.textAlign = 'center'; 
+
+        context.textAlign = 'center';
         context.textBaseline = 'middle';
         context.fillText(this.char, this.x, this.y);
         context.restore();
@@ -236,19 +236,19 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     }
 
     const init = () => {
-      width = canvas.width = window.innerWidth; 
+      width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
       if (width === 0 || height === 0) return;
       const scale = Math.min(width / 1100, height / 600) * 0.85;
       const geo = setupLogoGeometry(width, height, scale);
-      
+
       // If already initialized (resize), start particles at their target positions
       const startAtTarget = hasInitializedRef.current;
-      
+
       primaryParticles = geo.pts1.map(pt => new Particle(pt, PRIMARY_BASE_COLOR, true, startAtTarget));
       secondaryParticles = geo.pts2.map(pt => new Particle(pt, SECONDARY_BASE_COLOR, false, startAtTarget));
       backgroundElements = Array.from({ length: 130 }, () => new BackgroundDrifter(width, height));
-      
+
       if (!hasInitializedRef.current) {
         hasInitializedRef.current = true;
       }
@@ -260,11 +260,11 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       const now = Date.now();
       const elapsed = now - startTime;
       ctx.clearRect(0, 0, width, height);
-      backgroundElements.forEach(el => { 
-        el.update(width, height); 
-        el.draw(ctx); 
+      backgroundElements.forEach(el => {
+        el.update(width, height);
+        el.draw(ctx);
       });
-      
+
       secondaryParticles.forEach(p => {
         p.update(elapsed, mouseRef.current.x, mouseRef.current.y, now);
         p.draw(ctx, now);
@@ -287,20 +287,20 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       animationFrameId = requestAnimationFrame(animate);
     };
 
-    const handleResize = () => { 
+    const handleResize = () => {
       // Don't reset startTime on resize to prevent glitching
-      init(); 
+      init();
     };
-    
-    const handleMouseMove = (e: MouseEvent) => { 
-      mouseRef.current = { x: e.clientX, y: e.clientY }; 
+
+    const handleMouseMove = (e: MouseEvent) => {
+      mouseRef.current = { x: e.clientX, y: e.clientY };
     };
-    
+
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
-    init(); 
+    init();
     animate();
-    
+
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener('resize', handleResize);
@@ -311,23 +311,23 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   return (
     <>
       <canvas ref={canvasRef} className="absolute inset-0 z-10" />
-      
+
       {/* Subheading and symbol - increased font size and opacity */}
-      <div 
+      <div
         className="absolute z-20 pointer-events-none transition-all duration-1000 ease-out flex flex-col items-center"
-        style={{ 
-          left: '30%', 
-          top: '60%', 
-          transform: isLogoFormed ? 'translate(-50%, 0)' : 'translate(-50%, 20px)', 
-          opacity: isLogoFormed ? 1 : 0 
+        style={{
+          left: '30%',
+          top: '62%',
+          transform: isLogoFormed ? 'translate(-50%, 0)' : 'translate(-50%, 20px)',
+          opacity: isLogoFormed ? 1 : 0
         }}
       >
-        <h2 className="mb-1 pointer-events-auto cursor-default text-primary/90 text-[1.8vh] md:text-[15px] leading-tight tracking-[0.12em] uppercase transition-all duration-300 text-center hover:scale-105 hover:text-foreground font-kaisei">
-          The Official Student Chapter Of Computer Society Of India <br/> At DJ Sanghvi College Of Engineering
+        <h2 className="mb-2 pointer-events-auto cursor-default text-primary/90 text-[1.8vh] md:text-[16px] leading-tight tracking-[0.12em] uppercase transition-all duration-300 text-center hover:scale-105 hover:text-foreground font-kaisei w-[120%] -ml-4">
+          The Official Student Chapter Of Computer Society Of India <br /> At DJ Sanghvi College Of Engineering
         </h2>
 
         <div className="flex justify-center items-center w-full">
-          <h2 className="pointer-events-auto cursor-default text-primary/80 text-[3.5vh] md:text-[30px] leading-none tracking-[0.25em] mt-4 transition-all duration-300 hover:scale-125 hover:text-accent font-mono font-bold">
+          <h2 className="pointer-events-auto cursor-default text-primary/80 text-[3.5vh] md:text-[30px] leading-none tracking-[0.25em] mt-2 transition-all duration-300 hover:scale-125 hover:text-accent font-mono font-bold">
             {"</>"}
           </h2>
         </div>
