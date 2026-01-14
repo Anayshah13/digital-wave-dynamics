@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 
 const AnimatedWaves: React.FC = () => {
   return (
-    <div className="absolute bottom-0 left-0 right-0 w-full h-[25%] pointer-events-none z-30">
+    <div className="absolute bottom-0 left-0 right-0 w-full h-[30%] pointer-events-none z-30">
       <svg 
         className="w-full h-full" 
         preserveAspectRatio="none" 
@@ -24,8 +24,8 @@ const AnimatedWaves: React.FC = () => {
             duration: 10, 
             ease: "easeInOut" 
           }}
-          fill="#002a33"
-          opacity="0.6"
+          fill="hsl(186, 100%, 10%)"
+          opacity="0.7"
         />
         
         {/* Middle wave */}
@@ -43,8 +43,8 @@ const AnimatedWaves: React.FC = () => {
             ease: "easeInOut",
             delay: 0.5
           }}
-          fill="#006575"
-          opacity="0.5"
+          fill="hsl(186, 80%, 20%)"
+          opacity="0.6"
         />
         
         {/* Front wave - brightest */}
@@ -62,8 +62,8 @@ const AnimatedWaves: React.FC = () => {
             ease: "easeInOut",
             delay: 1
           }}
-          fill="#00a1b5"
-          opacity="0.35"
+          fill="hsl(186, 100%, 35%)"
+          opacity="0.4"
         />
       </svg>
     </div>
