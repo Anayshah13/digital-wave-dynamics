@@ -49,17 +49,17 @@ const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) 
             }}
             className="rounded-[1.5rem] p-6 flex flex-col items-center text-center h-full min-h-[420px] cursor-pointer group relative overflow-hidden backdrop-blur-[2px] border border-white/10 bg-[#0A2A35]/10 shadow-xl transition-all duration-500 hover:bg-[#0A2A35]/30 hover:border-white/20"
         >
-            {/* Internal Glow on Hover */}
+            {/* Internal Glow - Always Visible */}
             <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                className="absolute inset-0 opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{
                     boxShadow: 'inset 0 0 50px rgba(86, 161, 178, 0.15)'
                 }}
             />
 
-            {/* Animated glow spot */}
+            {/* Animated glow spot - Always Visible */}
             <motion.div
-                className="absolute inset-0 opacity-0 group-hover:opacity-30 transition-opacity duration-500"
+                className="absolute inset-0 opacity-30 transition-opacity duration-500"
                 style={{
                     background: 'radial-gradient(circle at 50% -20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%)',
                 }}
@@ -89,7 +89,7 @@ const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) 
 const AwardsSection: React.FC = () => {
     return (
         <section
-            className="relative w-full flex flex-col items-center justify-start pt-40 pb-20"
+            className="relative w-full flex flex-col items-center justify-start pt-28 pb-20"
             style={{
                 background: 'linear-gradient(180deg, #040708 0%, #184752 100%)'
             }}

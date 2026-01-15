@@ -8,6 +8,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -1000, y: -1000 });
   const [isLogoFormed, setIsLogoFormed] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const logoFormedRef = useRef(false);
 
   // Use a ref for the callback so it doesn't trigger re-renders of the effect
@@ -19,8 +20,8 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
 
   // Configuration
-  const PRIMARY_PARTICLE_COUNT = 2000;
-  const SECONDARY_PARTICLE_COUNT = 2400;
+  const PRIMARY_PARTICLE_COUNT = 4000;
+  const SECONDARY_PARTICLE_COUNT = 9600;
 
   const PRIMARY_BASE_COLOR = '#039eb2ff'; // Blue-leaning Teal
   const SECONDARY_BASE_COLOR = '#057382ff'; // Deep Azure-Teal
@@ -28,7 +29,6 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const HOVER_COLOR = '#ffffff';
   const TRANSITION_DELAY = 400;
   const GRAVITY = 0.28;
-  const BASE_FONT_SIZE = 10;
   const HOVER_RADIUS = 60;
 
   const LOGO_PATHS_1 = [
@@ -104,7 +104,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       }
     }
 
-    const setupLogoGeometry = (w: number, h: number, scale: number) => {
+    const setupLogoGeometry = (w: number, h: number, scale: number, xAnchorRatio: number) => {
       const path1 = new Path2D();
       const path2 = new Path2D();
 
@@ -112,7 +112,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       const center2X = 6923, center2Y = 6068;
 
       const yPos = h * 0.45;
-      const xAnchor = w * 0.3;
+      const xAnchor = w * xAnchorRatio;
 
       const matrix1 = new DOMMatrix()
         .translate(xAnchor, yPos)
@@ -151,6 +151,8 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       };
     };
 
+    let baseFontSize = 10; // Dynamic font size variable
+
     class Particle {
       char: string; targetX: number; targetY: number; x: number; y: number; vy: number; gravity: number;
       isLocked: boolean; visible: boolean; baseColor: string; isPrimary: boolean;
@@ -188,7 +190,8 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
         context.globalAlpha = shimmer;
         context.fillStyle = interpolateColor(this.baseColor, HOVER_COLOR, this.colorFactor);
 
-        const fontSize = this.isPrimary ? BASE_FONT_SIZE : BASE_FONT_SIZE - 3;
+        // Use dynamic baseFontSize
+        const fontSize = this.isPrimary ? baseFontSize : Math.max(1, baseFontSize - 3);
         context.font = `bold ${fontSize}px monospace`;
 
         context.textAlign = 'center'; context.textBaseline = 'middle';
@@ -200,8 +203,24 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     const init = () => {
       width = canvas.width = window.innerWidth; height = canvas.height = window.innerHeight;
       if (width === 0 || height === 0) return;
-      const scale = Math.min(width / 1100, height / 600) * 0.85;
-      const geo = setupLogoGeometry(width, height, scale);
+
+      const isMobileView = width < 768;
+      setIsMobile(isMobileView);
+
+      // Massive reduction for mobile: 3.5 instead of 10
+      baseFontSize = isMobileView ? 3.5 : 10;
+
+      let scale = Math.min(width / 1100, height / 600) * 0.85;
+
+      // Increase logo size much more in mobile
+      if (isMobileView) {
+        scale *= 2.5;
+      }
+
+      // Center on mobile (0.5), Left-third on desktop (0.3)
+      const xAnchorRatio = isMobileView ? 0.5 : 0.3;
+
+      const geo = setupLogoGeometry(width, height, scale, xAnchorRatio);
 
       primaryParticles = geo.pts1.map(pt => new Particle(pt, PRIMARY_BASE_COLOR, true));
       secondaryParticles = geo.pts2.map(pt => new Particle(pt, SECONDARY_BASE_COLOR, false));
@@ -252,7 +271,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
       <div
         className="absolute z-20 pointer-events-none transition-all duration-1000 ease-out flex flex-col items-center"
         style={{
-          left: '30%',
+          left: isMobile ? '50%' : '30%',
           top: '62%',
           transform: isLogoFormed ? 'translate(-50%, 0)' : 'translate(-50%, 20px)',
           opacity: isLogoFormed ? 1 : 0

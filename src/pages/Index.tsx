@@ -21,8 +21,8 @@ const Index: React.FC = () => {
 
     return (
         <div className="relative w-full bg-black min-h-screen">
-            {/* Hero Section - 97% viewport height as requested */}
-            <section className="relative h-[97vh] w-full overflow-hidden flex items-center justify-center font-mono select-none bg-black">
+            {/* Hero Section - Sticky for parallax effect */}
+            <section className="sticky top-0 z-0 h-[97vh] w-full overflow-hidden flex items-center justify-center font-mono select-none bg-black">
                 {/* Dynamic Background with Glows */}
                 <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
                     {/* Base gradient from black to teal */}
@@ -99,7 +99,7 @@ const Index: React.FC = () => {
             </motion.div>
 
             {/* Awards Section - Flows naturally after Hero */}
-            <div className="relative z-20">
+            <div className="relative z-20 drop-shadow-2xl">
                 <AwardsSection />
             </div>
         </div>
