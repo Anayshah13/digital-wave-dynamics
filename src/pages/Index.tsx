@@ -1,13 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Home, Calendar, Cpu, Users, Github, Mail } from 'lucide-react';
 import BinaryLogo from '@/components/BinaryLogo';
 import { FloatingDock } from '@/components/ui/floating-dock';
 import AwardsSection from '@/components/AwardsSection';
 import AnimatedWaves from '@/components/AnimatedWaves';
+import { GridScan } from '@/components/GridScan';
 
 const Index: React.FC = () => {
     const [logoFormed, setLogoFormed] = useState(false);
+    const [startScan, setStartScan] = useState(false);
+    const videoRef = useRef<HTMLVideoElement>(null);
+
+    useEffect(() => {
+        if (logoFormed) {
+            const timer = setTimeout(() => setStartScan(true), 1500);
+            return () => clearTimeout(timer);
+        }
+    }, [logoFormed]);
+
+    useEffect(() => {
+        if (videoRef.current) {
+            videoRef.current.playbackRate = 0.8;
+        }
+    }, []);
 
     // Nav items with larger icons relative to container if needed, but styling is handled by container classes
     const navItems = [
@@ -24,62 +40,42 @@ const Index: React.FC = () => {
             {/* Hero Section - Sticky for parallax effect */}
             <section className="sticky top-0 z-0 h-[97vh] w-full overflow-hidden flex items-center justify-center font-mono select-none bg-black">
                 {/* Dynamic Background with Glows */}
+                {/* Video Background */}
                 <div className="absolute inset-0 pointer-events-none z-0 overflow-hidden">
-                    {/* Base gradient from black to teal */}
-                    <div
-                        className="absolute inset-0"
-                        style={{
-                            background: 'linear-gradient(135deg, hsl(0, 0%, 0%) 0%, hsl(0, 0%, 0%) 40%, hsl(186, 100%, 8%) 70%, hsl(186, 100%, 15%) 100%)'
-                        }}
-                    />
-
-                    {/* Grid pattern overlay */}
-                    <div
-                        className="absolute inset-0 opacity-[0.04]"
-                        style={{
-                            backgroundImage: `
-                linear-gradient(to right, hsl(186, 100%, 50%) 1px, transparent 1px),
-                linear-gradient(to bottom, hsl(186, 100%, 50%) 1px, transparent 1px)
-              `,
-                            backgroundSize: '50px 50px'
-                        }}
-                    />
-
-                    {/* Dynamic right side glow */}
-                    <motion.div
-                        animate={{
-                            scale: [1, 1.1, 1],
-                            opacity: [0.02, 0.05, 0.02],
-                        }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute top-[-10%] right-[-30%] w-[30%] h-[150%]"
-                        style={{
-                            background: 'radial-gradient(ellipse at center, hsla(186, 97%, 12%, 1.00), transparent 70%)',
-                            filter: 'blur(60px)',
-                        }}
-                    />
-
-                    {/* Second dynamic orb for movement */}
-                    <motion.div
-                        animate={{
-                            x: [0, -50, 0],
-                            y: [0, 50, 0],
-                            opacity: [0.1, 0.2, 0.1],
-                        }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
-                        className="absolute bottom-[20%] right-[10%] w-[500px] h-[500px] rounded-full"
-                        style={{
-                            background: 'radial-gradient(circle at center, hsl(186, 100%, 40%), transparent 70%)',
-                            filter: 'blur(80px)',
-                        }}
-                    />
+                    <video
+                        ref={videoRef}
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        poster="/goat_holder.jpeg"
+                        className="absolute inset-0 w-full h-full object-cover"
+                    >
+                        <source src="/goat.mp4" type="video/mp4" />
+                    </video>
+                    {/* Dark gradient overlay to ensure content visibility */}
+                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
                 </div>
+
+                {/* Grid Scan - Infinite scanning after logo formation with delay */}
+                {startScan && (
+                    <div className="absolute inset-0 z-[1] pointer-events-none">
+                        <GridScan
+                            linesColor="rgb(59, 162, 162)"
+                            scanColor="#3b9da2" // Matching teal tone
+                            enableContinuousScan={true}
+                            // Increased scan duration to make it slower and steady
+                            scanDuration={3.5}
+                            gridScale={0.15}
+                            className="w-full h-full bg-transparent"
+                        />
+                    </div>
+                )}
 
                 {/* Binary Logo Canvas */}
                 <div className="absolute inset-0 z-10">
                     <BinaryLogo onLogoFormed={() => setLogoFormed(true)} />
                 </div>
-
                 {/* Lighter Waves integrated into Hero */}
                 <AnimatedWaves />
             </section>
@@ -93,7 +89,7 @@ const Index: React.FC = () => {
             >
                 <FloatingDock
                     items={navItems}
-                    desktopClassName="bg-transparent backdrop-blur-[40px] border border-white/20 h-20 gap-4 pb-4 shadow-2xl shadow-black/40"
+                    desktopClassName="bg-transparent backdrop-blur-[40px] border border-white/20 h-20 gap-8 px-10 pb-4 shadow-2xl shadow-black/40"
                     mobileClassName="bg-transparent backdrop-blur-[40px] border border-white/20"
                 />
             </motion.div>

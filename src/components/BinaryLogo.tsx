@@ -29,7 +29,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const HOVER_COLOR = '#ffffff';
   const TRANSITION_DELAY = 400;
   const GRAVITY = 0.28;
-  const HOVER_RADIUS = 60;
+  const HOVER_RADIUS = 120;
 
   const LOGO_PATHS_1 = [
     "M435 4635 c-11 -2 -55 -7 -98 -10 -59 -5 -75 -10 -70 -20 5 -7 86 -94 181 -192 l174 -180 141 0 c244 1 418 -55 537 -173 157 -155 192 -348 97 -538 -61 -121 -122 -187 -227 -244 -112 -62 -155 -71 -349 -73 l-173 -2 -186 -187 c-102 -102 -183 -189 -180 -192 12 -11 193 -24 358 -24 170 0 384 19 465 41 148 39 284 97 365 153 233 162 343 373 357 686 7 166 -9 267 -63 401 -77 193 -215 330 -427 426 -141 63 -183 75 -392 109 -83 14 -463 28 -510 19z",
@@ -145,9 +145,11 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
         return pts;
       };
 
+      const pCount = isMobile ? 1.2 : 4.2;
+      const sCount = isMobile ? 1.2 : 4.2;
       return {
-        pts1: generatePoints(path1, PRIMARY_PARTICLE_COUNT, 4.2),
-        pts2: generatePoints(path2, SECONDARY_PARTICLE_COUNT, 5.2)
+        pts1: generatePoints(path1, PRIMARY_PARTICLE_COUNT, pCount),
+        pts2: generatePoints(path2, SECONDARY_PARTICLE_COUNT, sCount)
       };
     };
 
@@ -214,7 +216,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
       // Increase logo size much more in mobile
       if (isMobileView) {
-        scale *= 2.5;
+        scale *= 1.80;
       }
 
       // Center on mobile (0.5), Left-third on desktop (0.3)

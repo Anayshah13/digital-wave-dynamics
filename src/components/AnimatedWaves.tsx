@@ -21,7 +21,7 @@ const AnimatedWaves: React.FC = () => {
                     }}
                     transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
                     fill="#56A1B2"
-                    opacity="0.5"
+                    opacity="0.65"
                 />
 
                 {/* Wave 2 - #38606C */}
@@ -35,7 +35,7 @@ const AnimatedWaves: React.FC = () => {
                     }}
                     transition={{ repeat: Infinity, duration: 9, ease: "easeInOut", delay: 0.5 }}
                     fill="#38606C"
-                    opacity="0.5"
+                    opacity="0.65"
                 />
 
                 {/* Wave 3 - #29464F */}
@@ -49,7 +49,7 @@ const AnimatedWaves: React.FC = () => {
                     }}
                     transition={{ repeat: Infinity, duration: 7, ease: "easeInOut", delay: 1 }}
                     fill="#29464F"
-                    opacity="0.5"
+                    opacity="0.65"
                 />
 
                 {/* Wave 4 - Top layer of this group - #29464F (Offset slightly) */}
@@ -63,7 +63,7 @@ const AnimatedWaves: React.FC = () => {
                     }}
                     transition={{ repeat: Infinity, duration: 8, ease: "easeInOut", delay: 1.5 }}
                     fill="#29464F"
-                    opacity="0.5"
+                    opacity="0.65"
                 />
             </svg>
         </div>

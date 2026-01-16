@@ -11,7 +11,7 @@ interface DockItemProps {
 
 const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
   const ref = useRef<HTMLDivElement>(null);
-  
+
   const distance = useTransform(mouseX, (val) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
     return val - bounds.x - bounds.width / 2;
@@ -32,7 +32,7 @@ const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
     >
       <AnimatePresence>
         {isHovered && (
-          <motion.span 
+          <motion.span
             initial={{ opacity: 0, y: 8, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 4, scale: 0.95 }}
@@ -43,7 +43,7 @@ const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
           </motion.span>
         )}
       </AnimatePresence>
-      <motion.div 
+      <motion.div
         animate={{ y: isHovered ? -4 : 0 }}
         transition={{ duration: 0.25, ease: "easeOut" }}
         className="h-4 w-4 md:h-5 md:w-5"
@@ -60,7 +60,7 @@ interface FloatingDockProps {
 
 const FloatingDock: React.FC<FloatingDockProps> = ({ onNavigate }) => {
   const mouseX = useMotionValue(Infinity);
-  
+
   const items = [
     { title: "Home", icon: <Home className="h-full w-full" />, href: "#home" },
     { title: "Events", icon: <Calendar className="h-full w-full" />, href: "#events" },
@@ -74,7 +74,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ onNavigate }) => {
     <motion.div
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
-      className="mx-auto flex h-14 md:h-16 items-end gap-1.5 md:gap-2 rounded-full bg-black/20 backdrop-blur-2xl border border-white/[0.06] px-4 md:px-5 pb-2 md:pb-2.5 shadow-2xl shadow-black/20"
+      className="mx-auto flex h-14 md:h-16 items-end gap-3 md:gap-4 rounded-full bg-black/20 backdrop-blur-2xl border border-white/[0.06] px-8 md:px-10 pb-2 md:pb-2.5 shadow-2xl shadow-black/20"
     >
       {items.map((item) => (
         <DockIcon key={item.title} mouseX={mouseX} {...item} />
