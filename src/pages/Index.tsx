@@ -54,12 +54,12 @@ const Index: React.FC = () => {
                         <source src="/goat.mp4" type="video/mp4" />
                     </video>
                     {/* Dark gradient overlay to ensure content visibility */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-transparent" />
+                    <div className="absolute inset-0 bg-linear-to-r from-black/80 to-transparent" />
                 </div>
 
                 {/* Grid Scan - Infinite scanning after logo formation with delay */}
                 {startScan && (
-                    <div className="absolute inset-0 z-[1] pointer-events-none">
+                    <div className="absolute inset-0 z-1 pointer-events-none">
                         <GridScan
                             linesColor="rgb(59, 162, 162)"
                             scanColor="#3b9da2" // Matching teal tone
@@ -89,8 +89,8 @@ const Index: React.FC = () => {
             >
                 <FloatingDock
                     items={navItems}
-                    desktopClassName="bg-transparent backdrop-blur-[40px] border border-white/20 h-20 gap-8 px-10 pb-4 shadow-2xl shadow-black/40"
-                    mobileClassName="bg-transparent backdrop-blur-[40px] border border-white/20"
+                    desktopClassName="bg-transparent backdrop-blur-2xl border border-white/20 h-20 gap-8 px-10 pb-4 shadow-2xl shadow-black/40"
+                    mobileClassName="bg-transparent backdrop-blur-2xl border border-white/20"
                 />
             </motion.div>
 

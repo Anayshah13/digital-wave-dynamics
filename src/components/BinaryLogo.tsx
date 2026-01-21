@@ -10,6 +10,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
   const [isLogoFormed, setIsLogoFormed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const logoFormedRef = useRef(false);
+  const isMobileRef = useRef(false);
 
   // Use a ref for the callback so it doesn't trigger re-renders of the effect
   const onLogoFormedRef = useRef(onLogoFormed);
@@ -208,6 +209,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
       const isMobileView = width < 768;
       setIsMobile(isMobileView);
+      isMobileRef.current = isMobileView;
 
       // Massive reduction for mobile: 3.5 instead of 10
       baseFontSize = isMobileView ? 3.5 : 10;
@@ -254,7 +256,10 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
     };
 
     const handleResize = () => { startTime = Date.now(); init(); };
-    const handleMouseMove = (e: MouseEvent) => { mouseRef.current = { x: e.clientX, y: e.clientY }; };
+    const handleMouseMove = (e: MouseEvent) => {
+      if (isMobileRef.current) return;
+      mouseRef.current = { x: e.clientX, y: e.clientY };
+    };
     window.addEventListener('resize', handleResize);
     window.addEventListener('mousemove', handleMouseMove);
     init(); animate();
@@ -267,7 +272,7 @@ const BinaryLogo: React.FC<BinaryLogoProps> = ({ onLogoFormed }) => {
 
   return (
     <>
-      <canvas ref={canvasRef} className="absolute inset-0 z-10" />
+      <canvas ref={canvasRef} className="absolute inset-0 z-10 pointer-events-none" />
 
       {/* Subheading and symbol - increased font size and opacity */}
       <div

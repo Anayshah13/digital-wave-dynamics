@@ -28,7 +28,7 @@ const DockIcon: React.FC<DockItemProps> = ({ mouseX, title, icon }) => {
       style={{ width: size, height: size }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
-      className="group relative flex items-center justify-center rounded-full bg-white/[0.03] backdrop-blur-2xl border border-white/[0.08] text-white/50 hover:text-white hover:bg-white/[0.08] hover:border-white/20 transition-all duration-300 cursor-pointer"
+      className="group relative flex items-center justify-center rounded-full bg-white/3 backdrop-blur-2xl border border-white/8 text-white/50 hover:text-white hover:bg-white/8 hover:border-white/20 transition-all duration-300 cursor-pointer"
     >
       <AnimatePresence>
         {isHovered && (
@@ -74,7 +74,7 @@ const FloatingDock: React.FC<FloatingDockProps> = ({ onNavigate }) => {
     <motion.div
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
-      className="mx-auto flex h-14 md:h-16 items-end gap-3 md:gap-4 rounded-full bg-black/20 backdrop-blur-2xl border border-white/[0.06] px-8 md:px-10 pb-2 md:pb-2.5 shadow-2xl shadow-black/20"
+      className="mx-auto flex h-14 md:h-16 items-end gap-3 md:gap-4 rounded-full bg-black/20 backdrop-blur-2xl border border-white/6 px-8 md:px-10 pb-2 md:pb-2.5 shadow-2xl shadow-black/20"
     >
       {items.map((item) => (
         <DockIcon key={item.title} mouseX={mouseX} {...item} />

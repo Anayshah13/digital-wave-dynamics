@@ -1,11 +1,206 @@
-@font-face {
-  font-family: 'Techy';
-  src: url('/techy.ttf') format('truetype');
+@import 'tailwindcss';
+
+@plugin 'tailwindcss-animate';
+
+@custom-variant dark (&:is(.dark *));
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 2rem;
+  @media (width >= --theme(--breakpoint-sm)) {
+    max-width: none;
+  }
+  @media (width >= 1400px) {
+    max-width: 1400px;
+  }
 }
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  --font-kalnia: Kalnia, serif;
+  --font-kaisei: Kaisei Decol, serif;
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-primary-glow: hsl(var(--primary-glow));
+  --color-primary-deep: hsl(var(--primary-deep));
+  --color-primary-dark: hsl(var(--primary-dark));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-card-glass: hsl(var(--card-glass));
+
+  --color-wave-1: hsl(187, 100%, 15%);
+  --color-wave-2: hsl(186, 100%, 35%);
+  --color-wave-3: hsl(186, 100%, 50%);
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-wave-flow: wave-flow 8s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-pulse-glow: pulse-glow 3s ease-in-out infinite;
+  --animate-slide-up: slide-up 0.8s ease-out;
+
+  --background-image-gradient-radial: radial-gradient(var(--tw-gradient-stops));
+  --background-image-gradient-hero: var(--gradient-hero);
+  --background-image-gradient-glass: var(--gradient-glass);
+
+  @keyframes accordion-down {
+    from {
+      height: 0;
+    }
+    to {
+      height: var(--radix-accordion-content-height);
+    }
+  }
+  @keyframes accordion-up {
+    from {
+      height: var(--radix-accordion-content-height);
+    }
+    to {
+      height: 0;
+    }
+  }
+  @keyframes wave-flow {
+    0%,
+    100% {
+      d: path(
+        'M0,160L48,176C96,192,192,224,288,224C384,224,480,192,576,165.3C672,139,768,117,864,128C960,139,1056,181,1152,197.3C1248,213,1344,203,1392,197.3L1440,192L1440,320L0,320Z'
+      );
+    }
+    50% {
+      d: path(
+        'M0,160L48,144C96,128,192,96,288,106.7C384,117,480,171,576,181.3C672,192,768,160,864,138.7C960,117,1056,107,1152,122.7C1248,139,1344,181,1392,202.7L1440,224L1440,320L0,320Z'
+      );
+    }
+  }
+  @keyframes float {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-10px);
+    }
+  }
+  @keyframes pulse-glow {
+    0%,
+    100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  @keyframes slide-up {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@utility glass {
+  /* Glassmorphism utilities */
+  @apply bg-white/5 backdrop-blur-xl border border-white/10;
+}
+
+@utility glass-strong {
+  @apply bg-white/10 backdrop-blur-2xl border border-white/20;
+}
+
+@utility glass-teal {
+  background: linear-gradient(
+    135deg,
+    hsla(186, 50%, 30%, 0.15) 0%,
+    hsla(186, 50%, 20%, 0.08) 100%
+  );
+  @apply backdrop-blur-xl border border-primary/20;
+}
+
+@utility font-kalnia {
+  /* Font families */
+  font-family: 'Kalnia', serif;
+}
+
+@utility font-kaisei {
+  font-family: 'Kaisei Decol', serif;
+}
+
+@utility font-techy {
+  font-family: 'Techy', sans-serif;
+}
+
+@utility text-glow {
+  /* Text effects */
+  text-shadow:
+    0 0 20px hsla(186, 100%, 50%, 0.5),
+    0 0 40px hsla(186, 100%, 50%, 0.3);
+}
+
+@utility text-glow-subtle {
+  text-shadow: 0 0 10px hsla(186, 100%, 50%, 0.3);
+}
+
+@utility animate-float {
+  /* Animations */
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-pulse-glow {
+  animation: pulse-glow 3s ease-in-out infinite;
+}
+
+@layer base {
+  @font-face {
+    font-family: 'Techy';
+    src: url('/techy.ttf') format('truetype');
+  }
+}
 
 @layer base {
   :root {
@@ -105,44 +300,6 @@
 }
 
 @layer utilities {
-
-  /* Glassmorphism utilities */
-  .glass {
-    @apply bg-white/5 backdrop-blur-xl border border-white/10;
-  }
-
-  .glass-strong {
-    @apply bg-white/10 backdrop-blur-2xl border border-white/20;
-  }
-
-  .glass-teal {
-    background: linear-gradient(135deg, hsla(186, 50%, 30%, 0.15) 0%, hsla(186, 50%, 20%, 0.08) 100%);
-    @apply backdrop-blur-xl border border-primary/20;
-  }
-
-  /* Font families */
-  .font-kalnia {
-    font-family: 'Kalnia', serif;
-  }
-
-  .font-kaisei {
-    font-family: 'Kaisei Decol', serif;
-  }
-
-  .font-techy {
-    font-family: 'Techy', sans-serif;
-  }
-
-  /* Text effects */
-  .text-glow {
-    text-shadow: 0 0 20px hsla(186, 100%, 50%, 0.5), 0 0 40px hsla(186, 100%, 50%, 0.3);
-  }
-
-  .text-glow-subtle {
-    text-shadow: 0 0 10px hsla(186, 100%, 50%, 0.3);
-  }
-
-  /* Animations */
   @keyframes float {
 
     0%,
@@ -175,13 +332,5 @@
     100% {
       background-position: 200% 0;
     }
-  }
-
-  .animate-float {
-    animation: float 6s ease-in-out infinite;
-  }
-
-  .animate-pulse-glow {
-    animation: pulse-glow 3s ease-in-out infinite;
   }
 }

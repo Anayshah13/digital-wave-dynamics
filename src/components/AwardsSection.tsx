@@ -47,7 +47,7 @@ const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) 
                 y: -10,
                 transition: { duration: 0.3, ease: "easeOut" }
             }}
-            className="rounded-[1.5rem] p-6 flex flex-col items-center text-center h-full min-h-[420px] cursor-pointer group relative overflow-hidden backdrop-blur-[2px] border border-white/10 bg-[#0A2A35]/10 shadow-xl transition-all duration-500 hover:bg-[#0A2A35]/30 hover:border-white/20"
+            className="rounded-3xl p-6 flex flex-col items-center text-center h-full min-h-[420px] cursor-pointer group relative overflow-hidden backdrop-blur-[2px] border border-white/10 bg-[#0A2A35]/10 shadow-xl transition-all duration-500 hover:bg-[#0A2A35]/30 hover:border-white/20"
         >
             {/* Internal Glow - Always Visible */}
             <motion.div
@@ -77,7 +77,7 @@ const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) 
             </h3>
 
             {/* Separator Line */}
-            <div className="w-20 h-[1px] bg-white/20 my-4 relative z-10"></div>
+            <div className="w-20 h-px bg-white/20 my-4 relative z-10"></div>
 
             <p className="relative z-10 text-lg lg:text-xl font-kaisei text-white/70 leading-relaxed group-hover:text-white/90 transition-colors duration-300">
                 {award.description}
@@ -96,7 +96,7 @@ const AwardsSection: React.FC = () => {
         >
 
             {/* Darkest Wave connecting to Hero - TOP LAYER - SIGNIFICANTLY Increased Amplitude */}
-            <div className="absolute top-0 left-0 right-0 w-full h-[150px] -translate-y-[95%] z-50 overflow-hidden pointer-events-none leading-[0]">
+            <div className="absolute top-0 left-0 right-0 w-full h-[150px] -translate-y-[95%] z-50 overflow-hidden pointer-events-none leading-0">
                 <svg
                     className="w-full h-full"
                     preserveAspectRatio="none"
