@@ -66,7 +66,7 @@ const AwardCard: React.FC<{ award: Award; index: number }> = ({ award, index }) 
             />
 
             <motion.span
-                className="relative z-10 text-4xl lg:text-5xl font-kaisei font-bold text-[#56A1B2] mb-6 tracking-wide group-hover:text-white transition-colors duration-300 drop-shadow-lg"
+                className="relative z-10 text-4xl lg:text-5xl font-techy font-bold text-[#56A1B2] mb-6 tracking-wide group-hover:text-white transition-colors duration-300 drop-shadow-lg"
                 style={{ textShadow: '0 4px 20px rgba(86, 161, 178, 0.3)' }}
                 whileHover={{ scale: 1.05 }}
             >

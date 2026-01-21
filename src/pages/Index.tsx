@@ -65,8 +65,8 @@ const Index: React.FC = () => {
                             scanColor="#3b9da2" // Matching teal tone
                             enableContinuousScan={true}
                             // Increased scan duration to make it slower and steady
-                            scanDuration={3.5}
-                            gridScale={0.15}
+                            scanDuration={4.5}
+                            gridScale={0.08}
                             className="w-full h-full bg-transparent"
                         />
                     </div>

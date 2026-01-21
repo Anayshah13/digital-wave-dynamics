@@ -56,6 +56,7 @@ float smoother01(float a, float b, float x){
 void mainImage(out vec4 fragColor, in vec2 fragCoord)
 {
     vec2 p = (2.0 * fragCoord - iResolution.xy) / iResolution.y;
+    p.y += 0.12; // Shift grid down slightly
     
     // Perfectly straight ray direction
     vec3 ro = vec3(0.0);
@@ -177,7 +178,7 @@ export const GridScan: React.FC<GridScanProps> = ({
     lineThickness = 1,
     linesColor = '#392e4e',
     scanColor = '#FF9FFC',
-    scanOpacity = 0.2,
+    scanOpacity = 0.15,
     gridScale = 0.15,
     bloomIntensity = 0.5,
     bloomThreshold = 0.1,
